@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>顧客評價與回饋</title>
+  <style>
+    body { font-family: sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; }
+    .container { max-width: 600px; margin: 0 auto; }
+    .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+    h2 { margin-top: 0; color: #333; }
+    .review-item { border-bottom: 1px solid #eee; padding: 12px 0; }
+    .review-item:last-child { border-bottom: none; }
+    .stars { color: #f39c12; font-weight: bold; }
+    .name { font-weight: bold; color: #2c3e50; }
+    .time { font-size: 0.8em; color: #888; float: right; }
+    .badge { background: #e8f5e9; color: #2e7d32; font-size: 0.8em; padding: 2px 6px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <h2>🌟 最新顧客評價</h2>
+    <div id="review-list">
+      <!-- 評價會顯示在這裡 -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // 1. 預設的好評與名字資料庫
+  const comments = [
+    "服務態度非常好，回應速度超快！非常推薦。",
+    "產品品質比想像中還要好，CP值很高，會再回購！",
+    "出貨速度極快，包裝完整用心，給五星好評！",
+    "專業又親切的服務，解答了我很多疑慮，太感謝了！",
+    "整體體驗非常棒，值得推薦給親朋好友。"
+  ];
+  
+  const names = ["陳小姐", "林先生", "張**", "User_9527", "黃先生", "Jessica W."];
+
+  // 2. 顯示評價的邏輯
+  function addReview(name, comment, isAuto = false) {
+    const list = document.getElementById('review-list');
+    const item = document.createElement('div');
+    item.className = 'review-item';
+    
+    const now = new Date();
+    const timeString = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    
+    item.innerHTML = `
+      <div>
+        <span class="name">${name}</span> 
+        <span class="stars">★★★★★</span>
+        ${isAuto ? '<span class="badge">已驗證購買</span>' : ''}
+        <span class="time">${timeString}</span>
+      </div>
+      <p style="margin: 5px 0 0 0; color: #555;">${comment}</p>
+    `;
+    
+    // 將最新評價放到最上面
+    list.insertBefore(item, list.firstChild);
+  }
+
+  // 預先載入兩篇基本好評
+  addReview("王先生", "第一次體驗，感覺非常棒！", true);
+  addReview("李小姐", "客服處理效率高，給讚！", true);
+
+  // 3. 自動生成好評（設定預設時間間隔）
+  // 這裡設定為每 10 秒自動出一篇（測試用），你可以調整數字：
+  // 如果要 30 分鐘，改為：30 * 60 * 1000
+  const INTERVAL = 10000; 
+
+  setInterval(() => {
+    const randomName = names[Math.floor(Math.random() * names.length)];
+    const randomComment = comments[Math.floor(Math.random() * comments.length)];
+    addReview(randomName, randomComment, true);
+  }, INTERVAL);
+</script>
+
+</body>
+</html>
